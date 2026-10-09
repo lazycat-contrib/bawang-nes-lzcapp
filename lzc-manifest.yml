@@ -11,7 +11,9 @@ services:
   bawang:
     # 镜像模式：Action 只读校验后把这行改写成加速地址（ghcr.io → ghcr.1ms.run）
     # upstream: ghcr.io/liangminmx/80h5:latest
-    image: ghcr.io/liangminmx/80h5:latest
+    # 可变 tag 必须指纹化（digest-pinned）并保持：这行里的摘要就是 bump: patch 的基线，
+    # 上游 latest 变了 Action 才把包版本 +1 并改写这里
+    image: ghcr.1ms.run/liangminmx/80h5:latest@sha256:17c8a014f9ba0b109d57d436d5b9f20dcb47e1a6eacaf01e8955696abda80df8
     # 镜像是 nginx:alpine（默认 root），保持 root 起，避免 /var/cache/nginx、/var/run 之类的权限意外
     user: root
     healthcheck:
