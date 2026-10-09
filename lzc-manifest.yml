@@ -1,0 +1,35 @@
+application:
+  subdomain: bawang
+  multi_instance: false
+  upstreams:
+    - location: /
+      backend: http://bawang:3080
+  # 纯静态的小游戏站，没有账号也没有隐私数据：手机、平板打开就能玩，不必先过微服登录
+  public_path:
+    - /
+services:
+  bawang:
+    # 镜像模式：Action 只读校验后把这行改写成加速地址（ghcr.io → ghcr.1ms.run）
+    # upstream: ghcr.io/liangminmx/80h5:latest
+    image: ghcr.io/liangminmx/80h5:latest
+    # 镜像是 nginx:alpine（默认 root），保持 root 起，避免 /var/cache/nginx、/var/run 之类的权限意外
+    user: root
+    healthcheck:
+      # nginx:alpine 自带 busybox wget；站点在 3080
+      test:
+        - CMD-SHELL
+        - wget -q -O /dev/null http://127.0.0.1:3080/ || exit 1
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+usage: |
+  小霸王游戏机（网页版 NES 模拟器）：镜像里自带 644 个 FC 游戏——魂斗罗、超级玛丽、
+  忍者龙剑传等等，打开就能玩。
+
+  【操作】
+  PC：方向键 + 键盘按键；手机/平板：页面上有触屏方向键与 A/B 键，横屏体验更好。
+
+  【数据】
+  纯静态站点，没有数据库、没有需要备份的数据；游戏 ROM 都在镜像里，升级只换镜像。
+  想自己加游戏的话，得自己构建镜像（上游 Dockerfile 是 nginx:alpine + 静态文件）。

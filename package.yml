@@ -1,0 +1,17 @@
+package: cloud.lazycat.app.bawang-nes
+version: 1.0.0
+name: 小霸王游戏机
+description: Web-based NES emulator with 644 built-in games — play Contra, Super Mario and other FC classics right in the browser, with touch controls on phones. Static nginx site, no data to back up.
+min_os_version: 1.5.0
+homepage: https://github.com/liangminmx/bawang-nes
+author: liangminmx
+locales:
+  zh:
+    name: "小霸王游戏机"
+    description: "网页版 NES 模拟器：自带 644 个 FC 游戏（魂斗罗、超级玛丽……），PC 与手机浏览器都能玩，手机支持触屏控制。"
+  zh_CN:
+    name: "小霸王游戏机"
+    description: "网页版 NES 模拟器：自带 644 个 FC 游戏（魂斗罗、超级玛丽……），PC 与手机浏览器都能玩，手机支持触屏控制。"
+  en:
+    name: "Bawang NES"
+    description: "Web-based NES emulator with 644 built-in FC classics; playable on desktop and mobile browsers with touch controls."

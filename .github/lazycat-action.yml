@@ -1,0 +1,47 @@
+version: 1
+
+project:
+  root: .
+  build_config: lzc-build.yml
+  package_file: package.yml
+  output: dist/bawang-nes.lpk
+  target_arch: amd64
+
+update:
+  strategy: publish
+  allow_downgrade: false
+  version_source:
+    type: image
+    image: app
+    # 上游只有 latest 一个可变 tag：按摘要比较，变了就把包版本 +1 个 patch
+    bump: patch
+
+build:
+  toolchains: []
+  run_buildscript: false
+
+images:
+  # 镜像模式（delivery.mode=mirror）：只读校验，把 manifest 里的镜像改写成加速地址
+  # （GHCR → ghcr.1ms.run），不把镜像搬到懒猫镜像源；因此也不能上官方商店。
+  - id: app
+    target: service
+    service: bawang
+    source: ghcr.io/liangminmx/80h5
+    # 可变 tag 的标准形状：custom + created 排序 + 精确 tag 过滤（配合 bump: patch 比较摘要）
+    channel: custom
+    sort: created
+    tag_regex: '^latest$'
+    delivery:
+      mode: mirror
+      # 可变镜像必须校验加速镜像里就是同一份（按摘要），否则风险自负
+      require_digest_match: true
+
+stores:
+  official:
+    # 只发喵喵商店：镜像模式本身也不满足官方商店的 registry.lazycat.cloud 要求
+    enabled: false
+  private:
+    enabled: true
+    skip_if_version_exists: true
+    name: 小霸王游戏机
+    summary: "小霸王游戏机（网页版 NES 模拟器）懒猫微服打包：自带 644 个 FC 游戏，PC 和手机都能玩。"
