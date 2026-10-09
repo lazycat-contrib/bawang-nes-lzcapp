@@ -3,24 +3,23 @@ application:
   multi_instance: false
   upstreams:
     - location: /
-      backend: http://bawang:3080
+      backend: http://bawang:80
   # 纯静态的小游戏站，没有账号也没有隐私数据：手机、平板打开就能玩，不必先过微服登录
   public_path:
     - /
 services:
   bawang:
-    # 镜像模式：Action 只读校验后把这行改写成加速地址（ghcr.io → ghcr.1ms.run）
-    # upstream: ghcr.io/liangminmx/80h5:latest
-    # 可变 tag 必须指纹化（digest-pinned）并保持：这行里的摘要就是 bump: patch 的基线，
-    # 上游 latest 变了 Action 才把包版本 +1 并改写这里
-    image: ghcr.1ms.run/liangminmx/80h5:latest@sha256:17c8a014f9ba0b109d57d436d5b9f20dcb47e1a6eacaf01e8955696abda80df8
-    # 镜像是 nginx:alpine（默认 root），保持 root 起，避免 /var/cache/nginx、/var/run 之类的权限意外
+    # 镜像模式：Action 只读校验后把加速地址与摘要写在这里（Docker Hub → docker.1ms.run）
+    # upstream: jzbdc/bawangnes:latest（仓库 Dockerfile 的 nginx 静态站，端口 80）
+    # 可变 tag 必须指纹化（digest-pinned）并保持：这行里的摘要就是 bump: patch 的基线
+    image: docker.1ms.run/jzbdc/bawangnes:latest@sha256:dc09aec0b3341cb9c942518c02878a420d1e55f5a6ac03d62d350b0d0dc3b00b
+    # 镜像是 nginx（默认 root），保持 root 起，避免 /var/cache/nginx、/var/run 之类的权限意外
     user: root
     healthcheck:
       # nginx:alpine 自带 busybox wget；站点在 3080
       test:
         - CMD-SHELL
-        - wget -q -O /dev/null http://127.0.0.1:3080/ || exit 1
+        - wget -q -O /dev/null http://127.0.0.1:80/ || exit 1
       interval: 30s
       timeout: 5s
       retries: 5

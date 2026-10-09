@@ -1,5 +1,5 @@
 package: cloud.lazycat.app.bawang-nes
-version: 1.0.0
+version: 1.0.1
 name: 小霸王游戏机
 description: Web-based NES emulator with 644 built-in games — play Contra, Super Mario and other FC classics right in the browser, with touch controls on phones. Static nginx site, no data to back up.
 min_os_version: 1.5.0

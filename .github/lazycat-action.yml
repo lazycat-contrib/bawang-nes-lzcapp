@@ -21,12 +21,12 @@ build:
   run_buildscript: false
 
 images:
-  # 镜像模式（delivery.mode=mirror）：只读校验，把 manifest 里的镜像改写成加速地址
-  # （GHCR → ghcr.1ms.run），不把镜像搬到懒猫镜像源；因此也不能上官方商店。
+  # 镜像模式（delivery.mode=mirror）：只读校验，manifest 里的镜像行已指纹化并指向加速地址
+  # （Docker Hub → docker.1ms.run），不把镜像搬到懒猫镜像源；因此也不能上官方商店。
   - id: app
     target: service
     service: bawang
-    source: ghcr.io/liangminmx/80h5
+    source: jzbdc/bawangnes
     # 可变 tag 的标准形状：custom + created 排序 + 精确 tag 过滤（配合 bump: patch 比较摘要）
     channel: custom
     sort: created
